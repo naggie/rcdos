@@ -23,9 +23,9 @@ bool
 uint8_t ballast_state = BALLAST_IDLE;
 
 void ballast_init(void) {
-	// to read throttle from driver
-	pinMode(BALLAST_RELAY_PIN_N,OUTPUT);
-	digitalWrite(BALLAST_RELAY_PIN_N,1);
+	// what???? Input output for off/on. WHAT?
+	pinMode(BALLAST_RELAY_PIN_N,INPUT);
+	//digitalWrite(BALLAST_RELAY_PIN_N,1);
 }
 
 void serial_init(void) {
@@ -44,12 +44,14 @@ void ballast_fsm(void) {
 		break;
 
 		case BALLAST_REQ:
-			digitalWrite(BALLAST_RELAY_PIN_N,0);
+			//digitalWrite(BALLAST_RELAY_PIN_N,0);
+			pinMode(BALLAST_RELAY_PIN_N,OUTPUT);
 			ballast_state = BALLAST_ACTIVE;
 		break;
 
 		case BALLAST_ACTIVE:
-			digitalWrite(BALLAST_RELAY_PIN_N,1);
+			//digitalWrite(BALLAST_RELAY_PIN_N,1);
+			pinMode(BALLAST_RELAY_PIN_N,INPUT);
 			ballast_state = BALLAST_IDLE;
 		break;
 	}
@@ -62,10 +64,11 @@ void serial_command (void) {
 		switch (command) {
 			case COMMAND_THROW:
 				ballast_throw();
+				Serial.write("THROW.\n");
 			break;
 
 			default:
-				Serial.write("Wut.\n");
+				Serial.write("Wut?\n");
 		}
 	}
 }
