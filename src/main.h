@@ -23,9 +23,8 @@ bool
 uint8_t ballast_state = BALLAST_IDLE;
 
 void ballast_init(void) {
-	// what???? Input output for off/on. WHAT?
-	pinMode(BALLAST_RELAY_PIN_N,INPUT);
-	//digitalWrite(BALLAST_RELAY_PIN_N,1);
+	pinMode(BALLAST_RELAY_PIN_N,OUTPUT);
+	digitalWrite(BALLAST_RELAY_PIN_N,0);
 }
 
 void serial_init(void) {
@@ -44,14 +43,12 @@ void ballast_fsm(void) {
 		break;
 
 		case BALLAST_REQ:
-			//digitalWrite(BALLAST_RELAY_PIN_N,0);
-			pinMode(BALLAST_RELAY_PIN_N,OUTPUT);
+			digitalWrite(BALLAST_RELAY_PIN_N,1);
 			ballast_state = BALLAST_ACTIVE;
 		break;
 
 		case BALLAST_ACTIVE:
-			//digitalWrite(BALLAST_RELAY_PIN_N,1);
-			pinMode(BALLAST_RELAY_PIN_N,INPUT);
+			digitalWrite(BALLAST_RELAY_PIN_N,0);
 			ballast_state = BALLAST_IDLE;
 		break;
 	}
