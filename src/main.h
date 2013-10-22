@@ -18,7 +18,9 @@
 bool
 	mains_online      = 0,
 	charging          = 0,
-	charging_conplete = 0;
+	charging_conplete = 0,
+	mains_status      = 0,
+	mains_status_last = 0;
 
 uint8_t ballast_state = BALLAST_IDLE;
 
@@ -61,11 +63,25 @@ void serial_command (void) {
 		switch (command) {
 			case COMMAND_THROW:
 				ballast_throw();
-				Serial.write("THROW.\n");
+				Serial.write("Trip activated!\n");
 			break;
 
 			default:
-				Serial.write("Wut?\n");
+				Serial.write("T to trip.\n");
 		}
 	}
+}
+
+void mains_check_init(void) {
+	pinMode(A0,INPUT);
+}
+
+void mains_check (void) {
+	mains_status_last = mains_status;
+	mains_status      = analogRead(A0) > 210;
+
+	if (mains_status == 0 && mains_status_last == 1)
+		Serial.write("GRID FAILURE WARNING");
+	else if (mains_status == 1 && mains_status_last == 0)
+		Serial.write("GRID POWER RESTORED");
 }

@@ -16,12 +16,14 @@ void setup () {
 	serial_init();
 	//status_init();
 	//setup_external_interrupts();
+	mains_check_init();
 
 	// set up scheduler with tick interval defined in config.h
 	SCH_init(TICK_INTERVAL);
 
 	SCH_add_task(ballast_fsm, 1, BALLAST_INTERVAL);
 	SCH_add_task(serial_command, 2, 20);
+	SCH_add_task(mains_check, 3, 40);
 
 	SCH_start();
 }
