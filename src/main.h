@@ -63,11 +63,11 @@ void serial_command (void) {
 		switch (command) {
 			case COMMAND_THROW:
 				ballast_throw();
-				Serial.write("Trip activated!\n");
+				Serial.println("Trip activated!");
 			break;
 
 			default:
-				Serial.write("T to trip.\n");
+				Serial.println("T to trip.");
 		}
 	}
 }
@@ -81,7 +81,7 @@ void mains_check (void) {
 	mains_status      = analogRead(A0) > 210;
 
 	if (mains_status == 0 && mains_status_last == 1)
-		Serial.write("GRID FAILURE WARNING");
+		Serial.println("GRID FAILURE WARNING");
 	else if (mains_status == 1 && mains_status_last == 0)
-		Serial.write("GRID POWER RESTORED");
+		Serial.println("GRID POWER RESTORED");
 }
